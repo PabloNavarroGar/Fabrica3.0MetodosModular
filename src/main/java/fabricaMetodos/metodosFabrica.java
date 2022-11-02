@@ -4,6 +4,8 @@
  */
 package fabricaMetodos;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author pablo
@@ -20,23 +22,55 @@ public class metodosFabrica {
 //    8º CosteProduccion
 //    9º Calcular Precioventa
 //    10º calcular unidadesBeneficio
+    //poner en publico los metodos
     
+    //private static void mostrarMensaje(String mensaje){
+        //JOptionPane.showMessageDialog(null, mensaje);
+
     
+    public static String menuInicial() {
+        //declaracion variable que contiene el menu 
+        String opcion;
+
+         String menu = """
+                        Escriba lo quiere hacer.
+                  -----------------------------------------
+                       Calcular=="Viabilidad de Productos"
+                       Salir== "Salir del programa"
+                  -----------------------------------------
+                  
+                  
+                  
+                  """;
+
+        
+
+            opcion = JOptionPane.showInputDialog(null, menu).toLowerCase();
+
+       
+        //|| opcion2.equalsIgnoreCase("salir")) para salir en otro momento
+        return opcion;
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public static boolean opcionCalcularySalir(String opcion){
+        
+        
+        
+    }
+
+    public static void menuCodigos() {
+
+        
+        if (menuInicial().equalsIgnoreCase("calcular")){
+        
+            JOptionPane.showMessageDialog(null,"Estoy en la opcion calcular");
+        }
+        
+        
+        
+        
+        
+            
+    }
+
 }
