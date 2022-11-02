@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
  * @author pablo
  */
 public class metodosFabrica {
-
+    
 //    1º metodo para mostarmuenu inicial
 //    2º metodo de leer codigos
 //    3º filtrarcodigos                
@@ -26,46 +26,49 @@ public class metodosFabrica {
     
     //private static void mostrarMensaje(String mensaje){
         //JOptionPane.showMessageDialog(null, mensaje);
-
     
-    public static String menuInicial() {
-        //declaracion variable que contiene el menu 
-        String opcion;
-
-         String menu = """
-                        Escriba lo quiere hacer.
-                  -----------------------------------------
-                       Calcular=="Viabilidad de Productos"
-                       Salir== "Salir del programa"
-                  -----------------------------------------
-                  
-                  
-                  
-                  """;
-
         
-
-            opcion = JOptionPane.showInputDialog(null, menu).toLowerCase();
-
-       
-        //|| opcion2.equalsIgnoreCase("salir")) para salir en otro momento
-        return opcion;
-    }
+//    public static  String menuInicial() {
+//        //declaracion variable que contiene el menu 
+//        String opcion;
+//
+//         String menu = """
+//                        Escriba lo quiere hacer.
+//                  -----------------------------------------
+//                       Calcular=="Viabilidad de Productos"
+//                       Salir== "Salir del programa"
+//                  -----------------------------------------
+//                  
+//                  
+//                  
+//                  """;
+//
+//        
+//
+//            opcion = JOptionPane.showInputDialog(null, menu).toLowerCase();
+//
+//       
+//        //|| opcion2.equalsIgnoreCase("salir")) para salir en otro momento
+//        return opcion;
+//    }
+//    
+//   public static boolean calcularYsalir(){
+//       
+//      boolean salir =true;
+//      
+//       if(menuInicial())
+//      
+//       
+//       
+//      return salir;
+//   }
+//   
+        
+        
+        
     
-    public static boolean opcionCalcularySalir(String opcion){
-        
-        
-        
-    }
 
-    public static void menuCodigos() {
-
-        
-        if (menuInicial().equalsIgnoreCase("calcular")){
-        
-            JOptionPane.showMessageDialog(null,"Estoy en la opcion calcular");
-        }
-        
+  
         
         
         
@@ -73,4 +76,3 @@ public class metodosFabrica {
             
     }
 
-}
