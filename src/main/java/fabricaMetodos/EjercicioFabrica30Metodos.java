@@ -17,10 +17,20 @@ public class EjercicioFabrica30Metodos {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-
+        //variables
         String opcion = "", codigoProducto = "";
+        String codigo = "";
+        final int PRECIO_BENEFICIO = 2500;
+        //Precio fijo delimitado para calcular la unidades que se necesitan para
+        //llegar a esa cantidad
+
+        double unidadesParaObtenerBeneficio = 0;
         
-        
+        double costeMateria=0;
+        double costeMano=0;
+        double costeProduccion = 0;
+        double costeVentaUnitaria;
+
         do {
 
             opcion = pedirOpcion(); // Opcion es "salir" o "calcular"
@@ -31,16 +41,45 @@ public class EjercicioFabrica30Metodos {
                 codigoProducto = pedirCodigoProducto(); // Código m1,p1,t1,salir
                 // Si ćodigo producto no es salir, realizo los cálculos
                 if (!codigoProducto.equalsIgnoreCase("salir")) {
-                    // Solicitar y filtrar materia prima
-                    soliticarMateriaPrima();
+                    switch (codigoProducto) {
+                        case "m1","m2","t1","t2","p1":
+                            //En esta variable se almacena el valor devuelto por
+                            //el método filtra rCosteMateriaPrima que tiene el filtro ya
+                            soliticarMateriaPrima();
 
-                    // Solicitar y filtrar mano de obra
-                    solicitarManoDeObra();
-                    // Calcular coste de producción
-                    costeProduccion(soliticarMateriaPrima(),solicitarManoDeObra());
-                    // Calcular precio venta unitario
-                    // Calcular unidades hasta llegar al beneficio
-                    // Mostrar toda la información
+                            //En esta variable se almacena el valor devuelto por
+                            //el método filtrarCosteManoObra
+                            solicitarManoDeObra();
+                            //En esta variable se almacena el valor devuelto por
+                            //el método calcularCosteProduccion
+
+                            costeProduccion(costeMateria,costeMano ,codigo);
+                            //En esta variable se almacena el valor devuelto por
+                            //el método calcular CosteVentaUnitaria que tiene el metodo y las 2 varibales
+                            costeVentaUnitaria = calculoPrecioVenta(costeProduccion, codigo);
+
+                            //En esta variable se almacena el valor devuelto por
+                            //el método calcularUnidadesParaObtenerBeneficios
+                            unidadesParaObtenerBeneficio
+                                    = beneficiosObjetivo(
+                                            costeProduccion,
+                                            costeVentaUnitaria,
+                                            PRECIO_BENEFICIO);
+                            break;
+
+                    }
+
+//                    // Solicitar y filtrar materia prima
+//                    soliticarMateriaPrima();
+//
+//                    // Solicitar y filtrar mano de obra
+//                    solicitarManoDeObra();
+//                    // Calcular coste de producción
+//                    costeProduccion(soliticarMateriaPrima(), solicitarManoDeObra(),mostrarMenuCodigos());
+//                    // Calcular precio venta unitario
+//                    //if(!codigoProducto.equalsIgnoreCase("t1")||codigoProducto.equalsIgnoreCase("t2")){
+//                    calculoPrecioVenta( 0,codigo);
+//                 
                 } else { // Si es salir
                     opcion = "salir";
                 }
@@ -68,6 +107,7 @@ public class EjercicioFabrica30Metodos {
 //        else{
 //            return false;
 //        }
+       // se devuelve los codigo para que se filtren
         return (codigo.equalsIgnoreCase("m1")
                 || codigo.equalsIgnoreCase("m2")
                 || codigo.equalsIgnoreCase("t1")
@@ -75,7 +115,7 @@ public class EjercicioFabrica30Metodos {
                 || codigo.equalsIgnoreCase("p1")
                 || codigo.equalsIgnoreCase("salir"));
     }
-
+    //Menu de los codigos
     public static String mostrarMenuCodigos() {
         String texto = """
                        Introduce el código del producto:
@@ -99,6 +139,7 @@ public class EjercicioFabrica30Metodos {
 //        else{
 //            return false;
 //        }
+    //devolvemos que si la opcion en salir o calcular
         return opcion.equalsIgnoreCase("salir") || opcion.equalsIgnoreCase("calcular");
     }
 
@@ -149,7 +190,6 @@ public class EjercicioFabrica30Metodos {
 
     public static double solicitarManoDeObra() {
 
-        
         double costeManoDeObra;
         do {
             String costeObraString = JOptionPane.showInputDialog("Introduce el "
@@ -166,27 +206,85 @@ public class EjercicioFabrica30Metodos {
         } while (!filtradoManoDeObra(costeManoDeObra));
         return costeManoDeObra;
     }
-    
-    
-    
-    public static boolean filtradoManoDeObra(double costeMano){
-        
+
+    public static boolean filtradoManoDeObra(double costeMano) {
+
         //El dato del return  tiene que ir con el mismo nombre que se pone 
         //en el parametro
-        
-        return  (costeMano >= 0.5 && costeMano<= 0.9);
+        return (costeMano >= 0.5 && costeMano <= 0.9);
     }
-    
-    public static double costeProduccion(double costeMateria, double costeMano){
-        
+
+    public static double costeProduccion(double costeMateria, double costeMano, String codigo) {
+
         double costeProduccionUnidad;
-        costeProduccionUnidad = costeMateria+costeMano;
-        
-        JOptionPane.showMessageDialog(null, " El coste de "
-                + "produccion es de :" +costeProduccionUnidad);
+        costeProduccionUnidad = costeMateria + costeMano;
+
+        JOptionPane.showMessageDialog(null, "El coste de producción del código " + codigo + " es: "
+                + String.format("%.2f", costeProduccionUnidad) + "€");
+
         return costeProduccionUnidad;
     }
-    
-    
-    
+
+    public static double calculoPrecioVenta(double costeProduccion, String codigo) {
+        double precioVenta;
+        //Calculo del precio de venta
+
+        final double PORCENTAJE_VENTA_UNITARIA_M1_M2_P1 = 0.5;
+        final double PORCENTAJE_VENTA_RESTO_ARTICULOS = 0.65;
+
+        //Mediante este switch hacemos un pequeño filtrado para calcular el
+        //coste de venta unitaria dependiendo del codigo de producto
+        switch (codigo) {
+            case "M1","M2","P1":
+                //Formula para calcular el coste de venta unitaria
+                precioVenta = costeProduccion + costeProduccion
+                        * PORCENTAJE_VENTA_UNITARIA_M1_M2_P1;
+
+                break;
+
+            default:
+                //equivalente a otro case
+                //ya que ya filtramos la entrada de datos anteriormente
+
+                //Formula para calcular el coste de venta unitaria
+                precioVenta = costeProduccion + costeProduccion
+                        * PORCENTAJE_VENTA_RESTO_ARTICULOS;
+
+        }
+
+        //Mensaje que muestra el precio de venta unitaria según el código
+        //Limitamos los decimales a 2
+        JOptionPane.showMessageDialog(null,
+                "El coste de venta unitaria del código " + " es: "
+                + String.format("%.2f", precioVenta) + "€");
+
+        //Devolvemos el valor que será guardada en una variable en el método
+        //mostrarPrograma
+        return precioVenta;
+    }
+
+    //Este método recibe por parámetros el coste de producción, el coste de 
+    //venta unitaria y el precio de beneficio y devuelve un valor tipo entero
+    //Calcula el número de unidades necesarias para llegar al beneficio
+    //internamente con la fórmula
+    private static int beneficiosObjetivo(double costeProduccion, double precioVenta, double precioBeneficio) {
+
+        //Variable temporal para guardar el número de dulces
+        //Será guardada en una variable en el método mostrarPrograma
+        double unidadesParaBeneficio;
+
+        //Formula para calcular las unidades
+        unidadesParaBeneficio = Math.ceil(precioBeneficio
+                / (precioVenta - costeProduccion));
+
+        //Mensaje que muestra el numero de unidades necesarias
+        JOptionPane.showMessageDialog(null,
+                "El numero de unidades para el beneficio son: "
+                + (int) unidadesParaBeneficio + " unidades");
+        //Hacemos conversiones explícitas de int a double para que nos
+        //devuelva valores enteros y no decimales
+        return (int) unidadesParaBeneficio;
+
+    }
+
 }
