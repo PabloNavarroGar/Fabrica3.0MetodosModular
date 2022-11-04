@@ -4,6 +4,7 @@
  */
 package fabricaMetodos;
 
+import java.util.InputMismatchException;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,16 +21,18 @@ public class EjercicioFabrica30Metodos {
         //variables
         String opcion = "", codigoProducto = "";
         String codigo = "";
+        //variable constante del objetivo del beneficio para el metodo beneficioObjetivo
         final int PRECIO_BENEFICIO = 2500;
         //Precio fijo delimitado para calcular la unidades que se necesitan para
         //llegar a esa cantidad
-
+        //NECESITO CREAR ESTAS VARIABLES PARA QUE GUARDE LO QUE SE DEVUELVE 
+        //EN CADA METODO DEBIDO A LOS RETURN, GRACIAS SAMUEL.
         double unidadesParaObtenerBeneficio = 0;
-        
-        double costeMateria=0;
-        double costeMano=0;
-        double costeProduccion = 0;
-        double costeVentaUnitaria;
+
+        double costeMateria = 0;//variable que contiene el metodo de materiaprima
+        double costeMano = 0;//variable que tiene el metodo manoobra
+        double costeProduccion = 0;//variable que tiene el coste de produccion
+        double costeVenta; //variable que tiene el precio de la venta
 
         do {
 
@@ -38,48 +41,40 @@ public class EjercicioFabrica30Metodos {
             // Si no es salir, pido el código de producto
             if (!opcion.equalsIgnoreCase("salir")) {
                 // Pedir y filtrar código del producto
-                codigoProducto = pedirCodigoProducto(); // Código m1,p1,t1,salir
+                codigoProducto = pedirCodigoProducto().toLowerCase(); // Código m1,p1,t1,salir
                 // Si ćodigo producto no es salir, realizo los cálculos
                 if (!codigoProducto.equalsIgnoreCase("salir")) {
+                    //he usado un swtich 
                     switch (codigoProducto) {
                         case "m1","m2","t1","t2","p1":
                             //En esta variable se almacena el valor devuelto por
-                            //el método filtra rCosteMateriaPrima que tiene el filtro ya
-                            soliticarMateriaPrima();
+                            //el método filtra CosteMateriaPrima que tiene el filtro ya
+                            //variable costeMateria para que guarde el resultado en el main
+                            costeMateria = soliticarMateriaPrima();
 
                             //En esta variable se almacena el valor devuelto por
                             //el método filtrarCosteManoObra
-                            solicitarManoDeObra();
+                            //variable costeMano para que guarde el resultado en el main
+                            costeMano = solicitarManoDeObra();
                             //En esta variable se almacena el valor devuelto por
                             //el método calcularCosteProduccion
-
-                            costeProduccion(costeMateria,costeMano ,codigo);
+                            //variable costeProduccion para que guarde el resultado en el main
+                            costeProduccion = costeProduccion(costeMateria, costeMano, codigoProducto);
                             //En esta variable se almacena el valor devuelto por
                             //el método calcular CosteVentaUnitaria que tiene el metodo y las 2 varibales
-                            costeVentaUnitaria = calculoPrecioVenta(costeProduccion, codigo);
+                            costeVenta = calculoPrecioVenta(costeProduccion, codigoProducto);
 
                             //En esta variable se almacena el valor devuelto por
                             //el método calcularUnidadesParaObtenerBeneficios
                             unidadesParaObtenerBeneficio
                                     = beneficiosObjetivo(
                                             costeProduccion,
-                                            costeVentaUnitaria,
+                                            costeVenta,
                                             PRECIO_BENEFICIO);
                             break;
 
                     }
 
-//                    // Solicitar y filtrar materia prima
-//                    soliticarMateriaPrima();
-//
-//                    // Solicitar y filtrar mano de obra
-//                    solicitarManoDeObra();
-//                    // Calcular coste de producción
-//                    costeProduccion(soliticarMateriaPrima(), solicitarManoDeObra(),mostrarMenuCodigos());
-//                    // Calcular precio venta unitario
-//                    //if(!codigoProducto.equalsIgnoreCase("t1")||codigoProducto.equalsIgnoreCase("t2")){
-//                    calculoPrecioVenta( 0,codigo);
-//                 
                 } else { // Si es salir
                     opcion = "salir";
                 }
@@ -107,7 +102,7 @@ public class EjercicioFabrica30Metodos {
 //        else{
 //            return false;
 //        }
-       // se devuelve los codigo para que se filtren
+        // se devuelve los codigo para que se filtren
         return (codigo.equalsIgnoreCase("m1")
                 || codigo.equalsIgnoreCase("m2")
                 || codigo.equalsIgnoreCase("t1")
@@ -115,6 +110,7 @@ public class EjercicioFabrica30Metodos {
                 || codigo.equalsIgnoreCase("p1")
                 || codigo.equalsIgnoreCase("salir"));
     }
+
     //Menu de los codigos
     public static String mostrarMenuCodigos() {
         String texto = """
@@ -139,7 +135,7 @@ public class EjercicioFabrica30Metodos {
 //        else{
 //            return false;
 //        }
-    //devolvemos que si la opcion en salir o calcular
+        //devolvemos que si la opcion en salir o calcular
         return opcion.equalsIgnoreCase("salir") || opcion.equalsIgnoreCase("calcular");
     }
 
@@ -164,41 +160,55 @@ public class EjercicioFabrica30Metodos {
     //Solicitar materia prima
     public static double soliticarMateriaPrima() {
 
-        double costeMateriaPrima;
+        double costeMateriaPrima = 0;
 
         //Bucle que se le introduce la materia prima
         do {
-            String costeString = JOptionPane.showInputDialog("Introduce el "
-                    + "coste de la materia prima(entre 0.1€ y 1€)");
-            //Parse del string a double
-            costeMateriaPrima = Double.parseDouble(costeString);
-            //Salida de datos
-            JOptionPane.showMessageDialog(null, "El coste de la"
-                    + " materia es de " + costeMateriaPrima);
+            try {
+                String costeString = JOptionPane.showInputDialog("Introduce el "
+                        + "coste de la materia prima(entre 0.1€ y 1€)");
+                //Parse del string a double
+
+                costeMateriaPrima = Double.parseDouble(costeString);
+                //Salida de datos
+                JOptionPane.showMessageDialog(null, "El coste de la"
+                        + " materia es de " + costeMateriaPrima);
+            } catch (NumberFormatException ime) {
+
+                JOptionPane.showMessageDialog(null, "Error precio no permitido");
+
+            }
             //! y lo que este entre los parentesis  significa
             //que todo lo que no se haga en el parentesis , se repetira
 
             //lee el metodo de filtrado, pasa al metodo de filtrado para comprobarlo
+            //cuando pide CosteMateria: se le pone costeMateriaPrima que es un double
         } while (!filtradoMateriaPrima(costeMateriaPrima));
         return costeMateriaPrima;
     }
 
     public static boolean filtradoMateriaPrima(double costeMateria) {
-
+        //en el filtrado solo hacemos el return para que compare
         return (costeMateria >= 0.1 && costeMateria <= 1.0);
     }
 
     public static double solicitarManoDeObra() {
 
-        double costeManoDeObra;
+        double costeManoDeObra = 0;
         do {
-            String costeObraString = JOptionPane.showInputDialog("Introduce el "
-                    + "coste de la mano de obra(entre 0.5€ y 0.9€)");
-            //Parse del string a double
-            costeManoDeObra = Double.parseDouble(costeObraString);
-            //Salida de datos
-            JOptionPane.showMessageDialog(null, "El coste de la"
-                    + " mano de obra " + costeManoDeObra);
+            try {
+                String costeObraString = JOptionPane.showInputDialog("Introduce el "
+                        + "coste de la mano de obra(entre 0.5€ y 0.9€)");
+                //Parse del string a double
+                costeManoDeObra = Double.parseDouble(costeObraString);
+                //Salida de datos
+                JOptionPane.showMessageDialog(null, "El coste de la"
+                        + " mano de obra " + costeManoDeObra);
+            } catch (NumberFormatException ime) {
+                JOptionPane.showMessageDialog(null, "Error precio "
+                        + "mano de obra no permitido");
+
+            }
             //! y lo que este entre los parentesis  significa
             //que todo lo que no se haga segun lo que le introduzca
             //en el parentesis , se repetira
@@ -213,13 +223,16 @@ public class EjercicioFabrica30Metodos {
         //en el parametro
         return (costeMano >= 0.5 && costeMano <= 0.9);
     }
+    //metodo para crear el coste de produccion por seguridad he introducido en orden 
+    //el double de materia mano y el codigo
 
     public static double costeProduccion(double costeMateria, double costeMano, String codigo) {
 
         double costeProduccionUnidad;
         costeProduccionUnidad = costeMateria + costeMano;
 
-        JOptionPane.showMessageDialog(null, "El coste de producción del código " + codigo + " es: "
+        JOptionPane.showMessageDialog(null, "El coste de producción del código " 
+                + codigo + " es: "
                 + String.format("%.2f", costeProduccionUnidad) + "€");
 
         return costeProduccionUnidad;
@@ -228,14 +241,15 @@ public class EjercicioFabrica30Metodos {
     public static double calculoPrecioVenta(double costeProduccion, String codigo) {
         double precioVenta;
         //Calculo del precio de venta
-
+        //M1,M2,P1
         final double PORCENTAJE_VENTA_UNITARIA_M1_M2_P1 = 0.5;
+        //T1,T2
         final double PORCENTAJE_VENTA_RESTO_ARTICULOS = 0.65;
 
         //Mediante este switch hacemos un pequeño filtrado para calcular el
         //coste de venta unitaria dependiendo del codigo de producto
         switch (codigo) {
-            case "M1","M2","P1":
+            case "m1","m2","p1":
                 //Formula para calcular el coste de venta unitaria
                 precioVenta = costeProduccion + costeProduccion
                         * PORCENTAJE_VENTA_UNITARIA_M1_M2_P1;
@@ -265,12 +279,12 @@ public class EjercicioFabrica30Metodos {
 
     //Este método recibe por parámetros el coste de producción, el coste de 
     //venta unitaria y el precio de beneficio y devuelve un valor tipo entero
-    //Calcula el número de unidades necesarias para llegar al beneficio
+    //Calcula el número de unidades necesarias para llegar a 2500€ de beneficio
     //internamente con la fórmula
-    private static int beneficiosObjetivo(double costeProduccion, double precioVenta, double precioBeneficio) {
+    private static int beneficiosObjetivo(double costeProduccion, double precioVenta,
+            double precioBeneficio) {
 
-        //Variable temporal para guardar el número de dulces
-        //Será guardada en una variable en el método mostrarPrograma
+        //Variable temporal para guardar el número de dulces necesarios.
         double unidadesParaBeneficio;
 
         //Formula para calcular las unidades
