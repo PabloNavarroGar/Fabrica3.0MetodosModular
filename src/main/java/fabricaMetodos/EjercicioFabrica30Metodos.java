@@ -251,8 +251,8 @@ public class EjercicioFabrica30Metodos {
         switch (codigo) {
             case "m1","m2","p1":
                 //Formula para calcular el coste de venta unitaria
-                precioVenta = costeProduccion + costeProduccion
-                        * PORCENTAJE_VENTA_UNITARIA_M1_M2_P1;
+                precioVenta = costeProduccion + (costeProduccion
+                        * PORCENTAJE_VENTA_UNITARIA_M1_M2_P1);
 
                 break;
 
@@ -261,8 +261,8 @@ public class EjercicioFabrica30Metodos {
                 //ya que ya filtramos la entrada de datos anteriormente
 
                 //Formula para calcular el coste de venta unitaria
-                precioVenta = costeProduccion + costeProduccion
-                        * PORCENTAJE_VENTA_RESTO_ARTICULOS;
+                precioVenta = costeProduccion + (costeProduccion
+                        * PORCENTAJE_VENTA_RESTO_ARTICULOS);
 
         }
 
